@@ -26,20 +26,21 @@
           <a href="/patient-profile">👤 My Profile</a>
           <a href="/about">Impact</a>
           <select id="language-selector" class="lang-select">
-            {% for code, name in languages.items() %}
+            {%- for code, name in languages.items() -%}
             <option
               value="{{ code }}"
-              {%
+              {%-
               if
               code=""
               ="current_lang"
-              %}selected{%
+              %}
+              selected{%-
               endif
               %}
             >
               {{ name }}
             </option>
-            {% endfor %}
+            {%- endfor -%}
           </select>
         </div>
       </div>
@@ -158,5 +159,17 @@
     </footer>
 
     <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+
+    <!-- Floating AI Chat Widget -->
+    <div class="chat-widget">
+      <a
+        href="/assistant"
+        class="chat-button"
+        title="Chat with MedAI Assistant"
+      >
+        💬
+        <span class="chat-button-tooltip">Ask MedAI Assistant</span>
+      </a>
+    </div>
   </body>
 </html>

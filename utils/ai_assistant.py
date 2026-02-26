@@ -2,7 +2,6 @@
 AI Assistant Module with Natural Language Processing and Multilingual Support
 """
 from transformers import pipeline
-from google.cloud import translate_v2
 import json
 import logging
 
@@ -17,14 +16,10 @@ class AIAssistant:
     
     def __init__(self):
         """Initialize the AI Assistant"""
-        try:
-            # NLP pipeline for intent classification and question answering
-            self.qa_pipeline = pipeline("question-answering", model="deepset/roberta-base-squad2")
-            self.sentiment_pipeline = pipeline("sentiment-analysis", model="distilbert-base-uncased-finetuned-sst-2-english")
-        except Exception as e:
-            logger.warning(f"Could not load transformers models: {e}. Using fallback mode.")
-            self.qa_pipeline = None
-            self.sentiment_pipeline = None
+        # Lazy load NLP models - don't load until needed
+        self.qa_pipeline = None
+        self.sentiment_pipeline = None
+        self._models_loaded = False
         
         # Module mapping for user queries
         self.module_routing = {
@@ -48,6 +43,20 @@ class AIAssistant:
         
         # Language codes
         self.supported_languages = ['en', 'hi', 'ta', 'te', 'ka', 'ml', 'bn', 'mr', 'gu']
+    
+    def _load_models(self):
+        """Lazy load NLP models on first use"""
+        if self._models_loaded:
+            return
+        
+        try:
+            self.qa_pipeline = pipeline("question-answering", model="deepset/roberta-base-squad2")
+            self.sentiment_pipeline = pipeline("sentiment-analysis", model="distilbert-base-uncased-finetuned-sst-2-english")
+            self._models_loaded = True
+            logger.info("NLP models loaded successfully")
+        except Exception as e:
+            logger.warning(f"Could not load transformers models: {e}. Using fallback mode.")
+            self._models_loaded = True  # Mark as attempted to avoid repeated failures
     
     def detect_language(self, text: str) -> str:
         """
@@ -154,6 +163,9 @@ class AIAssistant:
         """
         Answer healthcare questions using QA model
         """
+        # Lazy load models on first use
+        self._load_models()
+        
         if not self.qa_pipeline:
             return {
                 'question': question,
