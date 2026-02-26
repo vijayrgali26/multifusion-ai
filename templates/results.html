@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Health Risk Assessment Results - MedAI Fusion</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        .results-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 2rem;
+        }
+        
+        .risk-score-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 3rem;
+            border-radius: 15px;
+            text-align: center;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }
+        
+        .risk-percentage {
+            font-size: 4rem;
+            font-weight: bold;
+            margin: 1rem 0;
+        }
+        
+        .risk-badge {
+            display: inline-block;
+            padding: 0.5rem 1.5rem;
+            border-radius: 25px;
+            font-weight: 600;
+            margin-top: 1rem;
+        }
+        
+        .risk-badge.low { background: #10b981; }
+        .risk-badge.moderate { background: #f59e0b; }
+        .risk-badge.high { background: #ef4444; }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .info-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .info-card h3 {
+            color: #667eea;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .model-risk {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem;
+            background: #f3f4f6;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+        }
+        
+        .model-risk-bar {
+            height: 8px;
+            background: #e5e7eb;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 0.5rem;
+        }
+        
+        .model-risk-fill {
+            height: 100%;
+            background: #667eea;
+            transition: width 0.3s ease;
+        }
+        
+        .recommendation-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .recommendation-list li {
+            padding: 0.75rem;
+            margin-bottom: 0.5rem;
+            background: #f0fdf4;
+            border-left: 3px solid #10b981;
+            border-radius: 5px;
+        }
+        
+        .explanation-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .explanation-list li {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .cost-savings {
+            background: #ecfdf5;
+            border: 2px solid #10b981;
+            padding: 1.5rem;
+            border-radius: 10px;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .cost-amount {
+            font-size: 2rem;
+            color: #10b981;
+            font-weight: bold;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+        
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #5a67d8;
+        }
+        
+        .btn-secondary {
+            background: white;
+            color: #667eea;
+            border: 2px solid #667eea;
+        }
+        
+        .btn-secondary:hover {
+            background: #f3f4f6;
+        }
+        
+        .timestamp {
+            text-align: center;
+            color: #6b7280;
+            margin-top: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <span class="logo-text">🏥 MedAI Fusion</span>
+            </div>
+            <div class="nav-links">
+                <a href="/">Home</a>
+                <a href="/dashboard">New Screening</a>
+                <a href="/about">Impact</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="results-container">
+        <div class="risk-score-card">
+            <h1>Your Health Risk Assessment</h1>
+            <div class="risk-percentage">{{ results.final_risk }}%</div>
+            <p style="font-size: 1.2rem;">Confidence Level: {{ results.confidence }}%</p>
+            <span class="risk-badge {{ results.risk_level.lower().replace(' ', '-') }}">
+                {{ results.risk_level }}
+            </span>
+        </div>
+
+        <div class="cost-savings">
+            <h3>💰 Potential Cost Savings with Early Detection</h3>
+            <div class="cost-amount">₹{{ "{:,}".format(results.cost_savings) }}</div>
+            <p>Early screening costs ~₹1,500 vs. late-stage treatment costs ~₹5,00,000</p>
+        </div>
+
+        <div class="info-grid">
+            <div class="info-card">
+                <h3>🔍 Individual Model Predictions</h3>
+                <div class="model-risk">
+                    <span>Clinical Data Model</span>
+                    <strong>{{ results.individual_risks.clinical }}%</strong>
+                </div>
+                <div class="model-risk-bar">
+                    <div class="model-risk-fill" style="width: {{ results.individual_risks.clinical }}%"></div>
+                </div>
+                
+                <div class="model-risk">
+                    <span>Medical Imaging Model</span>
+                    <strong>{{ results.individual_risks.imaging }}%</strong>
+                </div>
+                <div class="model-risk-bar">
+                    <div class="model-risk-fill" style="width: {{ results.individual_risks.imaging }}%"></div>
+                </div>
+                
+                <div class="model-risk">
+                    <span>Wearable Data Model</span>
+                    <strong>{{ results.individual_risks.wearable }}%</strong>
+                </div>
+                <div class="model-risk-bar">
+                    <div class="model-risk-fill" style="width: {{ results.individual_risks.wearable }}%"></div>
+                </div>
+            </div>
+
+            <div class="info-card">
+                <h3>💡 AI Explanation</h3>
+                <p><strong>{{ results.explanations.message }}</strong></p>
+                <h4 style="margin-top: 1rem; color: #374151;">Key Contributing Factors:</h4>
+                <ul class="explanation-list">
+                    {% for feature in results.explanations.important_features %}
+                    <li>✓ {{ feature }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+
+        <div class="info-card">
+            <h3>📋 Personalized Recommendations</h3>
+            <ul class="recommendation-list">
+                {% for recommendation in results.recommendations %}
+                <li>{{ recommendation }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="action-buttons">
+            <button class="btn btn-primary" onclick="window.print()">🖨️ Print Report</button>
+            <button class="btn btn-secondary" onclick="window.location.href='/dashboard'">🔄 New Assessment</button>
+            <button class="btn btn-secondary" onclick="shareResults()">📤 Share</button>
+        </div>
+
+        <div class="timestamp">
+            <p>Report Generated: {{ results.timestamp }}</p>
+            <p style="font-size: 0.9rem; margin-top: 0.5rem;">
+                ⚠️ This is an AI-powered screening tool. Please consult a healthcare professional for diagnosis.
+            </p>
+        </div>
+    </div>
+
+    <script>
+        function shareResults() {
+            if (navigator.share) {
+                navigator.share({
+                    title: 'MedAI Fusion Health Report',
+                    text: 'View my AI-powered health risk assessment',
+                    url: window.location.href
+                }).catch(err => console.log('Error sharing:', err));
+            } else {
+                alert('Sharing not supported on this browser. Use Print to save the report.');
+            }
+        }
+    </script>
+</body>
+</html>

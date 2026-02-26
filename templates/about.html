@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Social Impact - MedAI Fusion</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        .about-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 2rem;
+        }
+        
+        .hero-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 4rem 2rem;
+            border-radius: 15px;
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .hero-section h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .hero-section p {
+            font-size: 1.2rem;
+            opacity: 0.95;
+        }
+        
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        
+        .metric-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: transform 0.3s;
+        }
+        
+        .metric-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .metric-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        
+        .metric-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #667eea;
+            margin: 0.5rem 0;
+        }
+        
+        .metric-label {
+            color: #6b7280;
+            font-size: 1rem;
+        }
+        
+        .section {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+        
+        .section h2 {
+            color: #667eea;
+            margin-bottom: 1.5rem;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 0.5rem;
+        }
+        
+        .problem-solution {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .problem-box {
+            background: #fee2e2;
+            border-left: 4px solid #ef4444;
+            padding: 1.5rem;
+            border-radius: 8px;
+        }
+        
+        .solution-box {
+            background: #d1fae5;
+            border-left: 4px solid #10b981;
+            padding: 1.5rem;
+            border-radius: 8px;
+        }
+        
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .tech-badge {
+            background: #667eea;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+        
+        .team-section {
+            text-align: center;
+            padding: 2rem;
+        }
+        
+        .cta-section {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            padding: 3rem;
+            border-radius: 15px;
+            text-align: center;
+        }
+        
+        .cta-button {
+            background: white;
+            color: #10b981;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 1rem;
+            transition: all 0.3s;
+        }
+        
+        .cta-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        @media (max-width: 768px) {
+            .problem-solution {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <span class="logo-text">🏥 MedAI Fusion</span>
+            </div>
+            <div class="nav-links">
+                <a href="/">Home</a>
+                <a href="/dashboard">Screening</a>
+                <a href="/about" class="active">Impact</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="about-container">
+        <div class="hero-section">
+            <h1>🌟 Democratizing Healthcare with AI</h1>
+            <p>Making early disease detection accessible and affordable for all Indians</p>
+        </div>
+
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <div class="metric-icon">👥</div>
+                <div class="metric-value">{{ metrics.lives_impacted }}</div>
+                <div class="metric-label">Lives Impacted</div>
+            </div>
+            
+            <div class="metric-card">
+                <div class="metric-icon">✅</div>
+                <div class="metric-value">{{ metrics.early_detections }}</div>
+                <div class="metric-label">Early Detections</div>
+            </div>
+            
+            <div class="metric-card">
+                <div class="metric-icon">💰</div>
+                <div class="metric-value">{{ metrics.cost_saved }}</div>
+                <div class="metric-label">Healthcare Cost Saved</div>
+            </div>
+            
+            <div class="metric-card">
+                <div class="metric-icon">🏥</div>
+                <div class="metric-value">{{ metrics.rural_reach }}</div>
+                <div class="metric-label">Primary Health Centers</div>
+            </div>
+        </div>
+
+        <div class="problem-solution">
+            <div class="problem-box">
+                <h3>❌ The Problem</h3>
+                <ul style="margin-top: 1rem; line-height: 1.8;">
+                    <li>70% of Indians lack access to specialized diagnostic facilities</li>
+                    <li>Late-stage disease detection leads to 5-10x higher treatment costs</li>
+                    <li>Doctor-to-patient ratio: 1:1,445 (WHO recommendation: 1:1,000)</li>
+                    <li>Rural areas face 72-hour delays for specialist consultations</li>
+                </ul>
+            </div>
+            
+            <div class="solution-box">
+                <h3>✅ Our Solution</h3>
+                <ul style="margin-top: 1rem; line-height: 1.8;">
+                    <li>AI-powered multi-modal screening at ₹500 per assessment</li>
+                    <li>85%+ accuracy with CNN, LSTM, and Random Forest fusion</li>
+                    <li>Results in under 5 minutes, available 24/7</li>
+                    <li>Multi-language support for 10+ Indian languages</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🤖 Technology Stack</h2>
+            <p>Our multi-modal AI platform combines three powerful data sources:</p>
+            <div class="tech-stack">
+                <div class="tech-badge">TensorFlow 2.13</div>
+                <div class="tech-badge">Keras CNN</div>
+                <div class="tech-badge">LSTM Networks</div>
+                <div class="tech-badge">XGBoost</div>
+                <div class="tech-badge">Random Forest</div>
+                <div class="tech-badge">SHAP Explainability</div>
+                <div class="tech-badge">Flask REST API</div>
+                <div class="tech-badge">MobileNetV2</div>
+                <div class="tech-badge">Ensemble Learning</div>
+            </div>
+            
+            <h3 style="margin-top: 2rem; color: #374151;">Three-Stage AI Pipeline:</h3>
+            <ol style="line-height: 2; margin-top: 1rem;">
+                <li><strong>Clinical Data Analysis:</strong> Random Forest + XGBoost models trained on 10,000+ patient records</li>
+                <li><strong>Medical Imaging:</strong> MobileNetV2 CNN for chest X-rays, CT scans, and MRI analysis</li>
+                <li><strong>Wearable Integration:</strong> LSTM network for heart rate, HRV, SpO2 time-series patterns</li>
+            </ol>
+        </div>
+
+        <div class="section">
+            <h2>🎯 Social Impact Goals</h2>
+            <div style="line-height: 2; margin-top: 1rem;">
+                <p><strong>2026 Target:</strong> Screen 50,000 patients across 100 rural PHCs</p>
+                <p><strong>2027 Vision:</strong> Deploy in 500+ locations, partner with National Health Mission</p>
+                <p><strong>Cost Reduction:</strong> From ₹5,000-₹15,000 specialist consultations to ₹500 AI screening</p>
+                <p><strong>Accessibility:</strong> Offline-capable PWA for low-bandwidth regions</p>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🏆 Why MedAI Fusion?</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin-top: 1rem;">
+                <div>
+                    <h4 style="color: #667eea;">🔒 Privacy-First</h4>
+                    <p>All data encrypted, compliant with Digital Personal Data Protection Act 2023</p>
+                </div>
+                <div>
+                    <h4 style="color: #667eea;">🌍 Inclusive Design</h4>
+                    <p>Hindi, Tamil, Telugu, Bengali, and 6 more languages supported</p>
+                </div>
+                <div>
+                    <h4 style="color: #667eea;">💡 Explainable AI</h4>
+                    <p>SHAP and LIME integration for transparent, interpretable predictions</p>
+                </div>
+                <div>
+                    <h4 style="color: #667eea;">📱 Mobile-First</h4>
+                    <p>Progressive Web App works on any smartphone, even offline</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="cta-section">
+            <h2 style="margin-bottom: 1rem;">Ready to Get Screened?</h2>
+            <p style="font-size: 1.1rem; margin-bottom: 1.5rem;">
+                Early detection saves lives. Take your free health risk assessment now.
+            </p>
+            <button class="cta-button" onclick="window.location.href='/dashboard'">
+                Start Free Screening →
+            </button>
+        </div>
+
+        <div class="team-section">
+            <p style="color: #6b7280; margin-top: 2rem;">
+                Built with ❤️ for India's healthcare revolution<br>
+                <small>A project by innovators committed to healthcare equity</small>
+            </p>
+        </div>
+    </div>
+</body>
+</html>

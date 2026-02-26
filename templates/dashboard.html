@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Screening - MedAI Fusion</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <span class="logo-text">🏥 MedAI Fusion</span>
+            </div>
+            <div class="nav-links">
+                <a href="/">Home</a>
+                <a href="/dashboard" class="active">Screening</a>
+                <a href="/about">Impact</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="dashboard-container">
+        <div class="progress-bar">
+            <div class="progress-step active" data-step="1">Clinical Data</div>
+            <div class="progress-step" data-step="2">Medical Images</div>
+            <div class="progress-step" data-step="3">Wearable Data</div>
+            <div class="progress-step" data-step="4">Analysis</div>
+        </div>
+
+        <form id="health-assessment-form" enctype="multipart/form-data">
+            <!-- Step 1: Clinical Data -->
+            <div class="form-step active" id="step-1">
+                <h2>📊 Clinical Information</h2>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Age</label>
+                        <input type="number" name="age" required min="1" max="120" placeholder="45">
+                    </div>
+                    <div class="form-group">
+                        <label>Gender</label>
+                        <select name="gender" required>
+                            <option value="M">Male</option>
+                            <option value="F">Female</option>
+                            <option value="O">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Blood Pressure (Systolic)</label>
+                        <input type="number" name="bp_systolic" required placeholder="120">
+                    </div>
+                    <div class="form-group">
+                        <label>Blood Pressure (Diastolic)</label>
+                        <input type="number" name="bp_diastolic" required placeholder="80">
+                    </div>
+                    <div class="form-group">
+                        <label>Total Cholesterol (mg/dL)</label>
+                        <input type="number" name="cholesterol" required placeholder="200">
+                    </div>
+                    <div class="form-group">
+                        <label>Fasting Blood Sugar (mg/dL)</label>
+                        <input type="number" name="blood_sugar" required placeholder="100">
+                    </div>
+                    <div class="form-group">
+                        <label>BMI</label>
+                        <input type="number" step="0.1" name="bmi" required placeholder="22.5">
+                    </div>
+                    <div class="form-group">
+                        <label>Family History of Heart Disease/Cancer</label>
+                        <select name="family_history" required>
+                            <option value="0">No</option>
+                            <option value="1">Yes</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Smoking Status</label>
+                        <select name="smoking" required>
+                            <option value="0">Never</option>
+                            <option value="1">Former</option>
+                            <option value="2">Current</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Exercise Hours/Week</label>
+                        <input type="number" step="0.5" name="exercise_hours" required placeholder="3">
+                    </div>
+                </div>
+                <button type="button" class="btn btn-primary next-step">Next →</button>
+            </div>
+
+            <!-- Step 2: Medical Images -->
+            <div class="form-step" id="step-2">
+                <h2>🩻 Medical Imaging (Optional)</h2>
+                <div class="upload-area">
+                    <input type="file" name="medical_image" id="medical_image" accept="image/*">
+                    <label for="medical_image" class="upload-label">
+                        <div class="upload-icon">📁</div>
+                        <p>Upload Chest X-Ray, CT Scan, or MRI</p>
+                        <small>Supported: JPG, PNG, DICOM (Max 16MB)</small>
+                    </label>
+                    <div id="image-preview"></div>
+                </div>
+                <p class="info-text">
+                    💡 Our CNN model analyzes medical images for early signs of abnormalities
+                </p>
+                <div class="button-group">
+                    <button type="button" class="btn btn-secondary prev-step">← Previous</button>
+                    <button type="button" class="btn btn-primary next-step">Next →</button>
+                </div>
+            </div>
+
+            <!-- Step 3: Wearable Data -->
+            <div class="form-step" id="step-3">
+                <h2>⌚ Wearable & Vital Data</h2>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Resting Heart Rate (BPM)</label>
+                        <input type="number" name="heart_rate" required placeholder="72">
+                    </div>
+                    <div class="form-group">
+                        <label>Heart Rate Variability (ms)</label>
+                        <input type="number" name="hrv" placeholder="50">
+                    </div>
+                    <div class="form-group">
+                        <label>Daily Steps (Average)</label>
+                        <input type="number" name="steps" placeholder="5000">
+                    </div>
+                    <div class="form-group">
+                        <label>Sleep Hours (Average)</label>
+                        <input type="number" step="0.5" name="sleep" placeholder="7">
+                    </div>
+                    <div class="form-group">
+                        <label>Blood Oxygen (SpO2 %)</label>
+                        <input type="number" name="spo2" min="70" max="100" placeholder="98">
+                    </div>
+                </div>
+                <p class="info-text">
+                    💡 LSTM model analyzes time-series patterns for cardiac risk assessment
+                </p>
+                <div class="button-group">
+                    <button type="button" class="btn btn-secondary prev-step">← Previous</button>
+                    <button type="submit" class="btn btn-primary" id="analyze-btn">
+                        🔬 Analyze Risk
+                    </button>
+                </div>
+            </div>
+
+            <!-- Step 4: Processing -->
+            <div class="form-step" id="step-4">
+                <div class="processing-animation">
+                    <div class="loader"></div>
+                    <h2>AI Models Analyzing Your Health Data...</h2>
+                    <div class="processing-steps">
+                        <div class="proc-step" id="proc-clinical">
+                            <span class="proc-icon">⏳</span> Analyzing Clinical Data with Random Forest...
+                        </div>
+                        <div class="proc-step" id="proc-image">
+                            <span class="proc-icon">⏳</span> Processing Medical Images with CNN...
+                        </div>
+                        <div class="proc-step" id="proc-wearable">
+                            <span class="proc-icon">⏳</span> Evaluating Wearable Data with LSTM...
+                        </div>
+                        <div class="proc-step" id="proc-fusion">
+                            <span class="proc-icon">⏳</span> Combining Results with Fusion Model...
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
