@@ -1,0 +1,438 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MedAI Assistant - Intelligent Healthcare Guide</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        padding: 20px;
+      }
+
+      .container {
+        max-width: 900px;
+        margin: 0 auto;
+      }
+
+      header {
+        text-align: center;
+        color: white;
+        margin-bottom: 30px;
+      }
+
+      header h1 {
+        font-size: 2.5em;
+        margin-bottom: 10px;
+      }
+
+      header p {
+        font-size: 1.1em;
+        opacity: 0.9;
+      }
+
+      .chat-container {
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        height: 600px;
+      }
+
+      .chat-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 20px;
+        font-size: 1.3em;
+        font-weight: bold;
+      }
+
+      .messages {
+        flex: 1;
+        overflow-y: auto;
+        padding: 20px;
+        background: #f7f7f7;
+      }
+
+      .message {
+        margin-bottom: 15px;
+        animation: slideIn 0.3s ease;
+      }
+
+      @keyframes slideIn {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .message.user {
+        text-align: right;
+      }
+
+      .message-content {
+        display: inline-block;
+        padding: 12px 16px;
+        border-radius: 10px;
+        max-width: 70%;
+        word-wrap: break-word;
+      }
+
+      .message.user .message-content {
+        background: #667eea;
+        color: white;
+        border-bottom-right-radius: 2px;
+      }
+
+      .message.bot .message-content {
+        background: white;
+        color: #333;
+        border: 1px solid #ddd;
+        border-bottom-left-radius: 2px;
+      }
+
+      .message-intent {
+        font-size: 0.85em;
+        margin-top: 5px;
+        opacity: 0.7;
+        font-style: italic;
+      }
+
+      .input-area {
+        padding: 15px;
+        background: white;
+        border-top: 1px solid #ddd;
+        display: flex;
+        gap: 10px;
+      }
+
+      input[type="text"] {
+        flex: 1;
+        padding: 12px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        font-size: 1em;
+        outline: none;
+      }
+
+      input[type="text"]:focus {
+        border-color: #667eea;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+      }
+
+      button {
+        padding: 12px 24px;
+        border: none;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: bold;
+        transition: transform 0.2s;
+      }
+
+      button:hover {
+        transform: translateY(-2px);
+      }
+
+      button:active {
+        transform: translateY(0);
+      }
+
+      .language-select {
+        margin-bottom: 20px;
+        text-align: center;
+      }
+
+      .language-select select {
+        padding: 8px 12px;
+        border-radius: 5px;
+        border: 2px solid white;
+        font-size: 1em;
+        cursor: pointer;
+      }
+
+      .info-section {
+        background: white;
+        border-radius: 15px;
+        padding: 20px;
+        margin-top: 20px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        color: #333;
+      }
+
+      .info-section h3 {
+        color: #667eea;
+        margin-bottom: 10px;
+      }
+
+      .info-section ul {
+        margin-left: 20px;
+        line-height: 1.8;
+      }
+
+      .suggested-actions {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 10px;
+        margin-top: 15px;
+      }
+
+      .action-btn {
+        padding: 10px;
+        background: #f0f0f0;
+        border: 2px solid #667eea;
+        border-radius: 8px;
+        cursor: pointer;
+        color: #667eea;
+        font-weight: bold;
+        transition: all 0.3s;
+      }
+
+      .action-btn:hover {
+        background: #667eea;
+        color: white;
+        transform: translateY(-2px);
+      }
+
+      .loading {
+        display: inline-block;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #667eea;
+        margin: 3px;
+        animation: pulse 1.4s infinite;
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          opacity: 0.3;
+        }
+        50% {
+          opacity: 1;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>🏥 MedAI Assistant</h1>
+        <p>Your Intelligent Healthcare Guide</p>
+      </header>
+
+      <div class="language-select">
+        <label>Select Language:</label>
+        <select id="languageSelect" onchange="changeLanguage()">
+          <option value="en">English</option>
+          <option value="hi">हिंदी (Hindi)</option>
+          <option value="ta">தமிழ் (Tamil)</option>
+          <option value="te">తెలుగు (Telugu)</option>
+          <option value="ml">മലയാളം (Malayalam)</option>
+          <option value="bn">বাংলা (Bengali)</option>
+          <option value="mr">मराठी (Marathi)</option>
+        </select>
+      </div>
+
+      <div class="chat-container">
+        <div class="chat-header">💬 Chat with MedAI Assistant</div>
+
+        <div class="messages" id="messagesContainer">
+          <div class="message bot">
+            <div class="message-content">
+              👋 Hello! I'm MedAI Assistant. I can help you:
+              <ul style="text-align: left; margin-top: 10px">
+                <li>Find relevant health services</li>
+                <li>Understand your symptoms</li>
+                <li>Analyze medical images</li>
+                <li>Track wearable health data</li>
+                <li>Get personalized recommendations</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="input-area">
+          <input
+            type="text"
+            id="userInput"
+            placeholder="Ask me anything about your health..."
+            onkeypress="handleKeyPress(event)"
+          />
+          <button onclick="sendMessage()">Send</button>
+        </div>
+      </div>
+
+      <div class="info-section">
+        <h3>📚 How to Use MedAI Assistant</h3>
+        <ul>
+          <li>
+            <strong>Ask about symptoms:</strong> "I have persistent cough and
+            chest pain"
+          </li>
+          <li>
+            <strong>Get guidance:</strong> "How do I upload medical images?"
+          </li>
+          <li><strong>Understand risks:</strong> "What is my health risk?"</li>
+          <li>
+            <strong>Access features:</strong> "Show me my health dashboard"
+          </li>
+          <li>
+            <strong>Health tips:</strong> "What should I do to stay healthy?"
+          </li>
+        </ul>
+      </div>
+
+      <div class="suggested-actions">
+        <button class="action-btn" onclick="quickQuery('I have chest pain')">
+          Chest Pain
+        </button>
+        <button class="action-btn" onclick="quickQuery('Upload medical image')">
+          Upload Image
+        </button>
+        <button
+          class="action-btn"
+          onclick="quickQuery('Show my health history')"
+        >
+          Health History
+        </button>
+        <button
+          class="action-btn"
+          onclick="quickQuery('What is my risk level?')"
+        >
+          Risk Assessment
+        </button>
+      </div>
+    </div>
+
+    <script>
+      let currentLanguage = "en";
+
+      function changeLanguage() {
+        currentLanguage = document.getElementById("languageSelect").value;
+      }
+
+      function sendMessage() {
+        const userInput = document.getElementById("userInput");
+        const message = userInput.value.trim();
+
+        if (!message) return;
+
+        // Add user message to chat
+        addMessage(message, "user");
+        userInput.value = "";
+
+        // Show loading indicator
+        showLoading();
+
+        // Send to assistant API
+        fetch("/api/assistant/chat", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            message: message,
+            language: currentLanguage,
+          }),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.success) {
+              removeLoading();
+              const responseText = `${data.response}\n\n[Intent: ${data.intent}] [Confidence: ${(data.confidence * 100).toFixed(0)}%]`;
+              addMessage(responseText, "bot", data.intent);
+            } else {
+              removeLoading();
+              addMessage(
+                "Sorry, I encountered an error. Please try again.",
+                "bot",
+              );
+            }
+          })
+          .catch((error) => {
+            removeLoading();
+            addMessage("Connection error. Please check your internet.", "bot");
+            console.error("Error:", error);
+          });
+      }
+
+      function addMessage(text, sender, intent = null) {
+        const messagesContainer = document.getElementById("messagesContainer");
+        const messageDiv = document.createElement("div");
+        messageDiv.className = `message ${sender}`;
+
+        const contentDiv = document.createElement("div");
+        contentDiv.className = "message-content";
+        contentDiv.textContent = text;
+
+        messageDiv.appendChild(contentDiv);
+
+        if (intent && sender === "bot") {
+          const intentDiv = document.createElement("div");
+          intentDiv.className = "message-intent";
+          intentDiv.textContent = `→ Navigate to: ${intent}`;
+          messageDiv.appendChild(intentDiv);
+        }
+
+        messagesContainer.appendChild(messageDiv);
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+      }
+
+      function showLoading() {
+        const messagesContainer = document.getElementById("messagesContainer");
+        const loadingDiv = document.createElement("div");
+        loadingDiv.className = "message bot";
+        loadingDiv.id = "loadingMessage";
+        loadingDiv.innerHTML = `
+                <div class="message-content">
+                    <div class="loading" style="display: inline-block;"></div>
+                    <div class="loading" style="display: inline-block;"></div>
+                    <div class="loading" style="display: inline-block;"></div>
+                </div>
+            `;
+        messagesContainer.appendChild(loadingDiv);
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+      }
+
+      function removeLoading() {
+        const loadingDiv = document.getElementById("loadingMessage");
+        if (loadingDiv) {
+          loadingDiv.remove();
+        }
+      }
+
+      function quickQuery(query) {
+        document.getElementById("userInput").value = query;
+        sendMessage();
+      }
+
+      function handleKeyPress(event) {
+        if (event.key === "Enter") {
+          sendMessage();
+        }
+      }
+
+      // Focus on input on load
+      window.addEventListener("load", function () {
+        document.getElementById("userInput").focus();
+      });
+    </script>
+  </body>
+</html>

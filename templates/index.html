@@ -1,133 +1,162 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>MedAI Fusion - Early Disease Detection Platform</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-</head>
-<body>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
     <nav class="navbar">
-        <div class="nav-container">
-            <div class="logo">
-                <span class="logo-text">🏥 MedAI Fusion</span>
-            </div>
-            <div class="nav-links">
-                <a href="/">Home</a>
-                <a href="/dashboard">Start Screening</a>
-                <a href="/about">Impact</a>
-                <select id="language-selector" class="lang-select">
-                    {% for code, name in languages.items() %}
-                    <option value="{{ code }}" {% if code == current_lang %}selected{% endif %}>
-                        {{ name }}
-                    </option>
-                    {% endfor %}
-                </select>
-            </div>
+      <div class="nav-container">
+        <div class="logo">
+          <span class="logo-text">🏥 MedAI Fusion</span>
         </div>
+        <div class="nav-links">
+          <a href="/">Home</a>
+          <a href="/dashboard">Start Screening</a>
+          <a href="/assistant">💬 AI Assistant</a>
+          <a href="/patient-profile">👤 My Profile</a>
+          <a href="/about">Impact</a>
+          <select id="language-selector" class="lang-select">
+            {% for code, name in languages.items() %}
+            <option
+              value="{{ code }}"
+              {%
+              if
+              code=""
+              ="current_lang"
+              %}selected{%
+              endif
+              %}
+            >
+              {{ name }}
+            </option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
     </nav>
 
     <section class="hero">
-        <div class="hero-content">
-            <h1 class="hero-title">
-                AI-Powered Early Disease Detection<br>
-                <span class="highlight">Affordable Healthcare for Every Indian</span>
-            </h1>
-            <p class="hero-subtitle">
-                Combining medical imaging, clinical data, and wearable insights to detect diseases 
-                before they become life-threatening. Reducing treatment costs by up to 80%.
-            </p>
-            
-            <div class="hero-stats">
-                <div class="stat-card">
-                    <div class="stat-number">₹5L</div>
-                    <div class="stat-label">Average Savings per Patient</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number">85%</div>
-                    <div class="stat-label">Early Detection Accuracy</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number">10K+</div>
-                    <div class="stat-label">Lives Impacted</div>
-                </div>
-            </div>
+      <div class="hero-content">
+        <h1 class="hero-title">
+          AI-Powered Early Disease Detection<br />
+          <span class="highlight">Affordable Healthcare for Every Indian</span>
+        </h1>
+        <p class="hero-subtitle">
+          Combining medical imaging, clinical data, and wearable insights to
+          detect diseases before they become life-threatening. Reducing
+          treatment costs by up to 80%.
+        </p>
 
-            <div class="cta-buttons">
-                <a href="/dashboard" class="btn btn-primary">Start Free Screening</a>
-                <a href="#how-it-works" class="btn btn-secondary">Learn More</a>
-            </div>
-
-            <div class="trust-badges">
-                <p>Trusted by:</p>
-                <div class="badges">
-                    <span class="badge">AIIMS Integration Ready</span>
-                    <span class="badge">Ayushman Bharat Compatible</span>
-                    <span class="badge">ISO 13485 Compliant</span>
-                </div>
-            </div>
+        <div class="hero-stats">
+          <div class="stat-card">
+            <div class="stat-number">₹5L</div>
+            <div class="stat-label">Average Savings per Patient</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number">85%</div>
+            <div class="stat-label">Early Detection Accuracy</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number">10K+</div>
+            <div class="stat-label">Lives Impacted</div>
+          </div>
         </div>
+
+        <div class="cta-buttons">
+          <a href="/dashboard" class="btn btn-primary">Start Free Screening</a>
+          <a href="#how-it-works" class="btn btn-secondary">Learn More</a>
+        </div>
+
+        <div class="trust-badges">
+          <p>Trusted by:</p>
+          <div class="badges">
+            <span class="badge">AIIMS Integration Ready</span>
+            <span class="badge">Ayushman Bharat Compatible</span>
+            <span class="badge">ISO 13485 Compliant</span>
+          </div>
+        </div>
+      </div>
     </section>
 
     <section id="how-it-works" class="how-it-works">
-        <div class="container">
-            <h2>How Multi-Modal AI Works</h2>
-            <div class="steps-grid">
-                <div class="step-card">
-                    <div class="step-icon">📊</div>
-                    <h3>Clinical Data Analysis</h3>
-                    <p>AI analyzes blood reports, BP, cholesterol using Random Forest & XGBoost</p>
-                </div>
-                <div class="step-card">
-                    <div class="step-icon">🩻</div>
-                    <h3>Medical Image Processing</h3>
-                    <p>CNN deep learning detects abnormalities in X-rays and scans</p>
-                </div>
-                <div class="step-card">
-                    <div class="step-icon">⌚</div>
-                    <h3>Wearable Data Monitoring</h3>
-                    <p>LSTM analyzes heart rate patterns and vital trends over time</p>
-                </div>
-                <div class="step-card">
-                    <div class="step-icon">🤝</div>
-                    <h3>AI Fusion & Risk Score</h3>
-                    <p>All data combined for comprehensive risk assessment with 85% accuracy</p>
-                </div>
-            </div>
+      <div class="container">
+        <h2>How Multi-Modal AI Works</h2>
+        <div class="steps-grid">
+          <div class="step-card">
+            <div class="step-icon">📊</div>
+            <h3>Clinical Data Analysis</h3>
+            <p>
+              AI analyzes blood reports, BP, cholesterol using Random Forest &
+              XGBoost
+            </p>
+          </div>
+          <div class="step-card">
+            <div class="step-icon">🩻</div>
+            <h3>Medical Image Processing</h3>
+            <p>CNN deep learning detects abnormalities in X-rays and scans</p>
+          </div>
+          <div class="step-card">
+            <div class="step-icon">⌚</div>
+            <h3>Wearable Data Monitoring</h3>
+            <p>LSTM analyzes heart rate patterns and vital trends over time</p>
+          </div>
+          <div class="step-card">
+            <div class="step-icon">🤝</div>
+            <h3>AI Fusion & Risk Score</h3>
+            <p>
+              All data combined for comprehensive risk assessment with 85%
+              accuracy
+            </p>
+          </div>
         </div>
+      </div>
     </section>
 
     <section class="social-impact">
-        <div class="container">
-            <h2>Social Impact for Rural India</h2>
-            <div class="impact-grid">
-                <div class="impact-card">
-                    <h3>🏥 PHC Integration</h3>
-                    <p>Deployable in Primary Health Centers with minimal infrastructure</p>
-                </div>
-                <div class="impact-card">
-                    <h3>💰 Affordable Screening</h3>
-                    <p>₹500 early detection vs ₹5,00,000 late-stage treatment</p>
-                </div>
-                <div class="impact-card">
-                    <h3>🌍 Multi-Language Support</h3>
-                    <p>Available in 10+ Indian languages for accessibility</p>
-                </div>
-                <div class="impact-card">
-                    <h3>📱 Mobile Compatible</h3>
-                    <p>Works on low-bandwidth connections and basic smartphones</p>
-                </div>
-            </div>
+      <div class="container">
+        <h2>Social Impact for Rural India</h2>
+        <div class="impact-grid">
+          <div class="impact-card">
+            <h3>🏥 PHC Integration</h3>
+            <p>
+              Deployable in Primary Health Centers with minimal infrastructure
+            </p>
+          </div>
+          <div class="impact-card">
+            <h3>💰 Affordable Screening</h3>
+            <p>₹500 early detection vs ₹5,00,000 late-stage treatment</p>
+          </div>
+          <div class="impact-card">
+            <h3>🌍 Multi-Language Support</h3>
+            <p>Available in 10+ Indian languages for accessibility</p>
+          </div>
+          <div class="impact-card">
+            <h3>📱 Mobile Compatible</h3>
+            <p>Works on low-bandwidth connections and basic smartphones</p>
+          </div>
         </div>
+      </div>
     </section>
 
     <footer>
-        <div class="container">
-            <p>© 2024 MedAI Fusion | Making Healthcare Accessible | Built for India 🇮🇳</p>
-        </div>
+      <div class="container">
+        <p>
+          © 2024 MedAI Fusion | Making Healthcare Accessible | Built for India
+          🇮🇳
+        </p>
+      </div>
     </footer>
 
     <script src="{{ url_for('static', filename='js/app.js') }}"></script>
-</body>
+  </body>
 </html>

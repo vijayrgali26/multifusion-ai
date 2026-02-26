@@ -12,8 +12,12 @@ scikit-learn==1.4.2
 xgboost==2.0.0
 
 # Deep Learning
-# tensorflow==2.13.0 # Optional: comment out if not using ML models
+tensorflow==2.15.0
 
+# Natural Language Processing & AI Assistant
+transformers==4.35.2
+torch==2.1.1
+langdetect==1.0.9
 
 # Image Processing
 Pillow==10.0.0

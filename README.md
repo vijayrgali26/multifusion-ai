@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # 🏥 MedAI Fusion - Multi-Modal AI Healthcare Platform
 
 ## 🚀 Affordable Early Disease Detection for India
@@ -80,3 +81,6 @@ All models are fused using ensemble learning for **85% accurate early disease de
 git clone https://github.com/yourusername/medai-fusion.git
 cd medai-fusion
 ```
+=======
+# multifusion-ai
+>>>>>>> 7c151e5f3ecc3bb2c957f4274eb7970e3b730df4
