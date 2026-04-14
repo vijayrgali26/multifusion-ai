@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MedAI Fusion - Early Disease Detection Platform</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <span class="logo-text">🏥 MedAI Fusion</span>
+            </div>
+            <div class="nav-links">
+                <a href="/">{{ t.nav_home }}</a>
+                <a href="/dashboard?lang={{ current_lang }}">{{ t.nav_screening }}</a>
+                <a href="/about?lang={{ current_lang }}">{{ t.nav_impact }}</a>
+                <select id="language-selector" class="lang-select">
+                    {% for code, name in languages.items() %}
+                    <option value="{{ code }}" {% if code == current_lang %}selected{% endif %}>
+                        {{ name }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1 class="hero-title">
+                {{ t.hero_title }}<br>
+                <span class="highlight">{{ t.hero_subtitle_highlight }}</span>
+            </h1>
+            <p class="hero-subtitle">
+                {{ t.hero_description }}
+            </p>
+            
+            <div class="hero-stats">
+                <div class="stat-card">
+                    <div class="stat-number">₹5L</div>
+                    <div class="stat-label">{{ t.hero_savings }}</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">85%</div>
+                    <div class="stat-label">{{ t.hero_accuracy }}</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">10K+</div>
+                    <div class="stat-label">{{ t.hero_lives }}</div>
+                </div>
+            </div>
+
+            <div class="cta-buttons">
+                <a href="/dashboard?lang={{ current_lang }}" class="btn btn-primary">{{ t.hero_btn_primary }}</a>
+                <a href="#how-it-works" class="btn btn-secondary">{{ t.hero_btn_secondary }}</a>
+            </div>
+
+            <div class="trust-badges">
+                <p>{{ t.hero_trusted }}</p>
+                <div class="badges">
+                    <span class="badge">{{ t.hero_badge_1 }}</span>
+                    <span class="badge">{{ t.hero_badge_2 }}</span>
+                    <span class="badge">{{ t.hero_badge_3 }}</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="how-it-works" class="how-it-works">
+        <div class="container">
+            <h2>How Multi-Modal AI Works</h2>
+            <div{{ t.how_it_works_title }}</h2>
+            <div class="steps-grid">
+                <div class="step-card">
+                    <div class="step-icon">📊</div>
+                    <h3>{{ t.clinical_data_title }}</h3>
+                    <p>{{ t.clinical_data_desc }}</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-icon">🩻</div>
+                    <h3>{{ t.image_processing_title }}</h3>
+                    <p>{{ t.image_processing_desc }}</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-icon">⌚</div>
+                    <h3>{{ t.wearable_monitoring_title }}</h3>
+                    <p>{{ t.wearable_monitoring_desc }}</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-icon">🤝</div>
+                    <h3>{{ t.fusion_title }}</h3>
+                    <p>{{ t.fusion_desc }}
+            </div>
+        </div>
+    </section>
+
+    <section class="social-impact">
+        <div class="container">
+            <h2>{{ t.impact_title }}</h2>
+            <div class="impact-grid">
+                <div class="impact-card">
+                    <h3>🏥 {{ t.impact_phc }}</h3>
+                    <p>{{ t.impact_phc_desc }}</p>
+                </div>
+                <div class="impact-card">
+                    <h3>💰 {{ t.impact_affordable }}</h3>
+                    <p>{{ t.impact_affordable_desc }}</p>
+                </div>
+                <div class="impact-card">
+                    <h3>🌍 {{ t.impact_language }}</h3>
+                    <p>{{ t.impact_language_desc }}</p>
+                </div>
+                <div class="impact-card">
+                    <h3>📱 {{ t.impact_mobile }}</h3>
+                    <p>{{ t.impact_mobile_desc }}</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>{{ t.footer }}</p>
+        </div>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>

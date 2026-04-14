@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Social Impact - MedAI Fusion</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        .about-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 2rem;
+        }
+        
+        .hero-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 4rem 2rem;
+            border-radius: 15px;
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .hero-section h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .hero-section p {
+            font-size: 1.2rem;
+            opacity: 0.95;
+        }
+        
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        
+        .metric-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: transform 0.3s;
+        }
+        
+        .metric-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .metric-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        
+        .metric-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #667eea;
+            margin: 0.5rem 0;
+        }
+        
+        .metric-label {
+            color: #6b7280;
+            font-size: 1rem;
+        }
+        
+        .section {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+        
+        .section h2 {
+            color: #667eea;
+            margin-bottom: 1.5rem;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 0.5rem;
+        }
+        
+        .problem-solution {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .problem-box {
+            background: #fee2e2;
+            border-left: 4px solid #ef4444;
+            padding: 1.5rem;
+            border-radius: 8px;
+        }
+        
+        .solution-box {
+            background: #d1fae5;
+            border-left: 4px solid #10b981;
+            padding: 1.5rem;
+            border-radius: 8px;
+        }
+        
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .tech-badge {
+            background: #667eea;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+        
+        .team-section {
+            text-align: center;
+            padding: 2rem;
+        }
+        
+        .cta-section {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            padding: 3rem;
+            border-radius: 15px;
+            text-align: center;
+        }
+        
+        .cta-button {
+            background: white;
+            color: #10b981;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 1rem;
+            transition: all 0.3s;
+        }
+        
+        .cta-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        @media (max-width: 768px) {
+            .problem-solution {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <span class="logo-text">🏥 MedAI Fusion</span>
+            </div>
+            <div class="nav-links">
+                <a href="/?lang={{ current_lang }}">{{ t.nav_home }}</a>
+                <a href="/dashboard?lang={{ current_lang }}">{{ t.nav_screening }}</a>
+                <a href="/about?lang={{ current_lang }}" class="active">{{ t.nav_impact }}</a>
+                <select id="language-selector" class="lang-select">
+                    {% for code, name in languages.items() %}
+                    <option value="{{ code }}" {% if code == current_lang %}selected{% endif %}>
+                        {{ name }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+    </nav>
+
+    <div class="about-container">
+        <div class="hero-section">
+            <h1>🌟 {{ t.about_title }}</h1>
+            <p>{{ t.about_subtitle }}</p>
+        </div>
+
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <div class="metric-icon">👥</div>
+                <div class="metric-value">{{ metrics.lives_impacted }}</div>
+                <div class="metric-label">{{ t.about_lives_impacted }}</div>
+            </div>
+            
+            <div class="metric-card">
+                <div class="metric-icon">✅</div>
+                <div class="metric-value">{{ metrics.early_detections }}</div>
+                <div class="metric-label">{{ t.about_early_detections }}</div>
+            </div>
+            
+            <div class="metric-card">
+                <div class="metric-icon">💰</div>
+                <div class="metric-value">{{ metrics.cost_saved }}</div>
+                <div class="metric-label">{{ t.about_cost_saved }}</div>
+            </div>
+            
+            <div class="metric-card">
+                <div class="metric-icon">🏥</div>
+                <div class="metric-value">{{ metrics.rural_reach }}</div>
+                <div class="metric-label">{{ t.about_rural_reach }}</div>
+            </div>
+        </div>
+
+        <div class="problem-solution">
+            <div class="problem-box">
+                <h3>❌ {{ t.about_problem }}</h3>
+                <ul style="margin-top: 1rem; line-height: 1.8;">
+                    <li>{{ t.about_problem_1 }}</li>
+                    <li>{{ t.about_problem_2 }}</li>
+                    <li>{{ t.about_problem_3 }}</li>
+                    <li>{{ t.about_problem_4 }}</li>
+                </ul>
+            </div>
+            
+            <div class="solution-box">
+                <h3>✅ {{ t.about_solution }}</h3>
+                <ul style="margin-top: 1rem; line-height: 1.8;">
+                    <li>{{ t.about_solution_1 }}</li>
+                    <li>{{ t.about_solution_2 }}</li>
+                    <li>{{ t.about_solution_3 }}</li>
+                    <li>{{ t.about_solution_4 }}</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🤖 {{ t.about_tech_title }}</h2>
+            <p>{{ t.about_tech_desc }}</p>
+            <div class="tech-stack">
+                <div class="tech-badge">TensorFlow 2.13</div>
+                <div class="tech-badge">Keras CNN</div>
+                <div class="tech-badge">LSTM Networks</div>
+                <div class="tech-badge">XGBoost</div>
+                <div class="tech-badge">Random Forest</div>
+                <div class="tech-badge">SHAP Explainability</div>
+                <div class="tech-badge">Flask REST API</div>
+                <div class="tech-badge">MobileNetV2</div>
+                <div class="tech-badge">Ensemble Learning</div>
+            </div>
+            
+            <h3 style="margin-top: 2rem; color: #374151;">{{ t.about_tech_pipeline }}</h3>
+            <ol style="line-height: 2; margin-top: 1rem;">
+                <li>{{ t.about_tech_1 }}</li>
+                <li>{{ t.about_tech_2 }}</li>
+                <li>{{ t.about_tech_3 }}</li>
+            </ol>
+        </div>
+
+        <div class="section">
+            <h2>🎯 {{ t.about_impact_title }}</h2>
+            <div style="line-height: 2; margin-top: 1rem;">
+                <p><strong>{{ t.about_impact_2026 }}</strong></p>
+                <p><strong>{{ t.about_impact_2027 }}</strong></p>
+                <p><strong>{{ t.about_impact_cost }}</strong></p>
+                <p><strong>{{ t.about_impact_access }}</strong></p>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🏆 {{ t.about_why_title }}</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin-top: 1rem;">
+                <div>
+                    <h4 style="color: #667eea;">🔒 {{ t.about_privacy }}</h4>
+                    <p>{{ t.about_privacy_desc }}</p>
+                </div>
+                <div>
+                    <h4 style="color: #667eea;">🌍 {{ t.about_inclusive }}</h4>
+                    <p>{{ t.about_inclusive_desc }}</p>
+                </div>
+                <div>
+                    <h4 style="color: #667eea;">💡 {{ t.about_explainable }}</h4>
+                    <p>{{ t.about_explainable_desc }}</p>
+                </div>
+                <div>
+                    <h4 style="color: #667eea;">📱 {{ t.about_mobile }}</h4>
+                    <p>{{ t.about_mobile_desc }}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="cta-section">
+            <h2 style="margin-bottom: 1rem;">{{ t.about_cta_title }}</h2>
+            <p style="font-size: 1.1rem; margin-bottom: 1.5rem;">
+                {{ t.about_cta_desc }}
+            </p>
+            <button class="cta-button" onclick="window.location.href='/dashboard?lang={{ current_lang }}'">
+                {{ t.hero_btn_primary }} →
+            </button>
+        </div>
+
+        <div class="team-section">
+            <p style="color: #ffffff; margin-top: 2rem;">
+                {{ t.about_footer }}<br>
+                <small>{{ t.about_footer_small }}</small>
+            </p>
+        </div>
+    </div>
+</body>
+</html>
