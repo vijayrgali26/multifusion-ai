@@ -1,82 +1,198 @@
-# 🏥 MedAI Fusion - Multi-Modal AI Healthcare Platform
+﻿# MedAI Fusion
 
-## 🚀 Affordable Early Disease Detection for India
+MedAI Fusion is a Flask-based healthcare screening platform that combines clinical inputs, medical image analysis, and wearable data into a single AI-assisted risk assessment flow.
 
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![Python](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
-[![TensorFlow](https://img.shields.io/badge/tensorflow-2.13-orange.svg)](https://www.tensorflow.org/)
-[![Flask](https://img.shields.io/badge/flask-2.3-green.svg)](https://flask.palletsprojects.com/)
+Live demo: [multifusion-mr3a4x7ie-vijayrgaligali-3801s-projects.vercel.app](https://multifusion-mr3a4x7ie-vijayrgaligali-3801s-projects.vercel.app)
 
----
+## About The Project
 
-## 🎯 Problem We Solve
+This project is built as an early-risk healthcare screening application. It helps users enter health-related details, upload a medical image, provide wearable metrics, and receive a combined risk score with explanations and recommendations.
 
-- **60% of Indians** cannot afford late-stage cancer treatment (₹5-10 lakhs)
-- **70% of diseases** are detected too late in rural areas
-- **Fragmented healthcare data** - doctors analyze scans, reports, and wearables separately
-- **Language barriers** prevent rural populations from accessing AI healthcare
+The main goal is to make health screening more accessible by combining multiple health signals in one place instead of depending on only one data source.
 
-## 💡 Our Solution
+## What The Project Does
 
-**MedAI Fusion** combines multiple AI models to analyze:
+MedAI Fusion collects three categories of input:
 
-- 📊 **Clinical data** (blood reports, BP, cholesterol) using Random Forest & XGBoost
-- 🩻 **Medical images** (X-rays, CT scans) using CNN deep learning
-- ⌚ **Wearable data** (heart rate, SpO2) using LSTM time-series analysis
+- Clinical data
+- Medical image input
+- Wearable and lifestyle data
 
-All models are fused using ensemble learning for **85% accurate early disease detection**.
+After that, the app:
 
----
+- Computes individual risk estimates
+- Combines them into a final fused risk score
+- Shows confidence level
+- Explains important factors
+- Suggests recommendations
+- Displays estimated cost savings from early detection
 
-## 🏆 Key Features
+## How It Works
 
-### Multi-Modal AI Architecture
+### Step 1. Clinical Data
 
-- **Clinical Model**: Random Forest + XGBoost on UCI datasets
-- **Image Model**: CNN/ResNet50 on NIH Chest X-ray datasets
-- **Wearable Model**: LSTM on MIT-BIH Arrhythmia patterns
-- **Fusion Model**: Confidence-weighted ensemble learning
+The user enters values such as:
 
-### Explainable AI
+- Age
+- Gender
+- Blood pressure
+- Cholesterol
+- Blood sugar
+- BMI
+- Family history
+- Smoking status
+- Exercise hours
 
-- SHAP/LIME integration shows which factors contribute to risk
-- Builds trust with doctors and patients
+This information is used to calculate a clinical risk score.
 
-### Social Impact Focus
+### Step 2. Medical Image Upload
 
-- ₹500 early screening vs ₹5,00,000 late treatment
-- Deployable in Primary Health Centers (PHCs)
-- Works on low-bandwidth connections
-- Multi-language support (10+ Indian languages)
+The user can upload a medical image. The app processes the image and estimates risk contribution using image-based analysis.
 
----
+### Step 3. Wearable Data
 
-## 📊 Technical Stack
+The user provides:
 
-| Component  | Technology                         |
-| ---------- | ---------------------------------- |
-| Frontend   | HTML5, CSS3, JavaScript, Bootstrap |
-| Backend    | Python Flask, REST API             |
-| ML/DL      | TensorFlow, Scikit-learn, XGBoost  |
-| Database   | MySQL, SQLAlchemy                  |
-| Deployment | Docker, AWS/Azure                  |
-| Monitoring | TensorBoard, MLflow                |
+- Heart rate
+- HRV
+- Daily steps
+- Sleep hours
+- SpO2
 
----
+These signals are used to calculate a wearable-based health risk score.
 
-## 🛠️ Installation
+### Step 4. Fusion
 
-### Prerequisites
+The backend combines:
 
-- Python 3.8+
-- Node.js 14+ (optional for frontend development)
-- MySQL 8.0+ (optional for database)
+- Clinical risk
+- Image risk
+- Wearable risk
 
-### Quick Start
+It then generates:
 
-1. **Clone the repository**
+- Final risk percentage
+- Confidence percentage
+- Risk level
+- Recommendations
+- Explanation summary
+
+## Important Features
+
+- Multi-step health assessment flow
+- Multi-modal fusion of clinical, image, and wearable inputs
+- Final result page with risk, confidence, and recommendations
+- Explanation layer that highlights the most important factors
+- Multilingual interface support for English, Kannada, and Hindi
+- Deployment-ready Flask app running on Vercel
+- Input validation for all critical numeric user fields
+
+## Input Validation
+
+This project includes validation limits for important health fields.
+
+Example:
+
+- Maximum age is `100`
+- If a user enters `123`, the app shows:
+  `Age limit exceeded. Maximum allowed is 100.`
+
+Similar limits are applied to:
+
+- Systolic blood pressure
+- Diastolic blood pressure
+- Cholesterol
+- Blood sugar
+- BMI
+- Exercise hours
+- Heart rate
+- HRV
+- Steps
+- Sleep
+- SpO2
+
+The validation is implemented in both:
+
+- Frontend JavaScript for immediate user feedback
+- Backend Flask logic for secure enforcement
+
+## Pages In The Application
+
+- `/`
+  Landing page introducing the platform and its value.
+
+- `/dashboard`
+  Main assessment flow where users enter all required health details.
+
+- `/predict`
+  Backend endpoint that validates the data, runs prediction logic, and stores results.
+
+- `/results`
+  Result page that shows final risk, confidence, key factors, recommendations, and cost savings.
+
+- `/about`
+  Project mission and social impact page.
+
+## Tech Stack
+
+- Backend: Flask
+- Frontend: HTML, CSS, JavaScript
+- Data Processing: NumPy, Pandas
+- Clinical Logic: scikit-learn
+- Image Processing: Pillow
+- Deployment: Vercel
+
+## Project Structure
+
+```text
+mediafusion-ai/
+|-- app.py
+|-- requirements.txt
+|-- vercel.json
+|-- templates/
+|-- static/
+|-- models/
+|-- utils/
+|-- data/
+|-- database/
+|-- docs/
+|-- translations.py
+```
+
+## Local Setup
 
 ```bash
-git clone https://github.com/yourusername/medai-fusion.git
-cd medai-fusion
+git clone https://github.com/vijayrgali26/multifusion-ai.git
+cd multifusion-ai
+python -m venv .venv
+.venv\Scripts\activate
+pip install -r requirements.txt
+python app.py
 ```
+
+Open the app at:
+
+```text
+http://127.0.0.1:5000
+```
+
+## Deployment Notes
+
+The project includes:
+
+- `vercel.json` for Vercel routing
+- `.python-version` for Python version selection
+- `requirements.txt` for Python dependencies
+
+## Why This Project Matters
+
+MedAI Fusion is built around the idea of affordable early screening. The project aims to:
+
+- Bring multiple health indicators into one workflow
+- Improve awareness through simple AI-assisted results
+- Support accessibility through multilingual UI
+- Encourage earlier action before conditions become more serious
+
+## Disclaimer
+
+This project is a prototype and educational healthcare application. It does not replace professional medical diagnosis, treatment, or clinical decision-making.
