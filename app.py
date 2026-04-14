@@ -11,7 +11,6 @@ from werkzeug.utils import secure_filename
 import json
 from datetime import datetime
 import pickle
-import tensorflow as tf
 from models.clinical_model import ClinicalPredictor
 from models.image_model import ImagePredictor
 from models.wearable_model import WearablePredictor

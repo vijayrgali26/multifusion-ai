@@ -7,9 +7,14 @@ import pandas as pd
 import numpy as np
 import pickle
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.ensemble import GradientBoostingClassifier
 from sklearn.preprocessing import StandardScaler
-import xgboost as xgb
 import joblib
+
+try:
+    import xgboost as xgb
+except ImportError:
+    xgb = None
 
 class ClinicalPredictor:
     def __init__(self):
@@ -24,9 +29,12 @@ class ClinicalPredictor:
         try:
             # Load models if already trained
             self.rf_model = joblib.load('models/saved/clinical_rf.pkl')
-            self.xgb_model = joblib.load('models/saved/clinical_xgb.pkl')
             self.scaler = joblib.load('models/saved/clinical_scaler.pkl')
-        except:
+            if xgb is not None:
+                self.xgb_model = joblib.load('models/saved/clinical_xgb.pkl')
+            else:
+                self.xgb_model = self.rf_model
+        except Exception:
             # Train new models if not found
             self.train_models()
     
@@ -72,21 +80,25 @@ class ClinicalPredictor:
         )
         self.rf_model.fit(X_scaled, y_train)
         
-        # Train XGBoost
-        self.xgb_model = xgb.XGBClassifier(
-            n_estimators=100,
-            max_depth=5,
-            learning_rate=0.1,
-            objective='binary:logistic',
-            random_state=42
-        )
+        # Train XGBoost when available, otherwise use a lightweight sklearn model.
+        if xgb is not None:
+            self.xgb_model = xgb.XGBClassifier(
+                n_estimators=100,
+                max_depth=5,
+                learning_rate=0.1,
+                objective='binary:logistic',
+                random_state=42
+            )
+        else:
+            self.xgb_model = GradientBoostingClassifier(random_state=42)
         self.xgb_model.fit(X_scaled, y_train)
         
         # Save models
         import os
         os.makedirs('models/saved', exist_ok=True)
         joblib.dump(self.rf_model, 'models/saved/clinical_rf.pkl')
-        joblib.dump(self.xgb_model, 'models/saved/clinical_xgb.pkl')
+        if xgb is not None:
+            joblib.dump(self.xgb_model, 'models/saved/clinical_xgb.pkl')
         joblib.dump(self.scaler, 'models/saved/clinical_scaler.pkl')
     
     def predict(self, clinical_data):
